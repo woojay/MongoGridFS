@@ -16,7 +16,7 @@ app.use(methodOverride('_method'));
 app.set('view engine', 'ejs');
 
 // Mongo URI
-const mongoURI = 'mongodb://datauser:passwd@ds123919.mlab.com:23919/chefmomfood';
+const mongoURI = 'mongodb://datauser:passwd@ds1239190.mlab.com:23919/data';
 
 // Mongo Cnxn
 const conn = mongoose.createConnection(mongoURI);
