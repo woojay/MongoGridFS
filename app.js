@@ -8,6 +8,9 @@ const Grid = require('gridfs-stream');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 
+// config settings
+require('dotenv').config({ path: 'settings.env' });
+
 const app = express();
 
 // Middlewares
@@ -16,10 +19,11 @@ app.use(methodOverride('_method'));
 app.set('view engine', 'ejs');
 
 // Mongo URI
-const mongoURI = 'mongodb://datauser:passwd@ds1239190.mlab.com:23919/data';
+const mongoURI = process.env.MONGO_URI;
+// console.log(`Connecting to: ${mongoURI}`);
 
 // Mongo Cnxn
-const conn = mongoose.createConnection(mongoURI);
+const conn = mongoose.createConnection(process.env.MONGO_URI);
 
 // Init gfs variable
 let gfs;
@@ -56,18 +60,18 @@ app.get('/', (req, res) => {
   gfs.files.find().toArray((err, files) => {
     if (!files || files.length === 0) {
       res.render('index', { files: false });
-      } else {
-        files.map((file) => {
-          if (file.contentType === 'image/jpeg' || file.contentType === 'image/png')
-          {
-            file.isImage = true;
-          } else {
-            file.isImage = false;
-          }
-        });
-        res.render('index', { files });
-      }
-    });
+    } else {
+      files.map((file) => {
+        if (file.contentType === 'image/jpeg' || file.contentType === 'image/png')
+        {
+          file.isImage = true;
+        } else {
+          file.isImage = false;
+        }
+      });
+      res.render('index', { files });
+    }
+  });
 });
 
 // @route POST /upload
@@ -140,5 +144,9 @@ app.delete('/files/:id', (req, res) => {
 });
 
 const port = 5000;
-app.listen(port, () => console.log(`Server on ${port}`));
-// app.listen(port);
+// app.listen(port, () => console.log(`Server on ${port}`));
+app.listen(port, (err) => {
+  if (err) {
+    console.log(err);
+  }
+});
