@@ -16,7 +16,7 @@ app.use(methodOverride('_method'));
 app.set('view engine', 'ejs');
 
 // Mongo URI
-const mongoURI = 'mongodb://datauser:n0rthbendm@ds123919.mlab.com:23919/chefmomfood';
+const mongoURI = 'mongodb://datauser:passwd@ds123919.mlab.com:23919/chefmomfood';
 
 // Mongo Cnxn
 const conn = mongoose.createConnection(mongoURI);
@@ -57,7 +57,7 @@ app.get('/', (req, res) => {
     if (!files || files.length === 0) {
       res.render('index', { files: false });
       } else {
-        files.map(file => {
+        files.map((file) => {
           if (file.contentType === 'image/jpeg' || file.contentType === 'image/png')
           {
             file.isImage = true;
@@ -125,13 +125,11 @@ app.get('/image/:filename', (req, res) => {
         err: 'Not an image',
       });
     }
-    // return res.json(file);
   });
 });
 
 // @route DELETE /files/:id
 // @desc Delete File
-
 app.delete('/files/:id', (req, res) => {
   gfs.remove({ _id: req.params.id, root: 'uploads' }, (err, gridStore) => {
     if (err) {
@@ -142,6 +140,5 @@ app.delete('/files/:id', (req, res) => {
 });
 
 const port = 5000;
-
-// app.listen(port, () => console.log(`Server on ${port}`));
-app.listen(port);
+app.listen(port, () => console.log(`Server on ${port}`));
+// app.listen(port);
